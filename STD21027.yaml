@@ -59,9 +59,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateStudent'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/CreateStudent'
         required: true
       responses:
         200:
@@ -85,9 +82,6 @@ paths:
         description: Student to be changed
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/Student'
-          application/xml:
             schema:
               $ref: '#/components/schemas/Student'
         required: true
@@ -115,9 +109,34 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UpdateStudent'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/UpdateStudent'
+            examples:
+              changeName:
+                summary: Change name
+                description: How to change name and what it does
+                value:
+                 id: 1
+                 name: "New name"
+              changeAddress:
+                summary: Change address
+                description: How to change address and what it does
+                value:
+                 id: 1
+                 name: "Ivandry"
+              changeNameandAddres:
+                summary: Change name and address but not all
+                value:
+                  id: 1
+                  name: "Rakoto"
+                  address: "Ivandry"
+              addPhoneNumbers:
+                summary: Add new phone numbers
+                value:
+                  id: 1
+                  PhoneNumbers:
+                  - number : '0344061205'
+                    country_code: '+261'
+                  - number : '0347592498'
+                    country_code: '+261'
         required: true
       responses:
         200:
@@ -221,9 +240,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/CreateCourse'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/CreateCourse'
         required: true
       responses:
         200:
@@ -249,9 +265,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Course'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Course'
         required: true
       responses:
         200:
@@ -275,9 +288,6 @@ paths:
         description: Course to be changed
         content:
           application/json:
-            schema:
-              $ref: '#/components/schemas/UpdateCourse'
-          application/xml:
             schema:
               $ref: '#/components/schemas/UpdateCourse'
         required: true
@@ -348,6 +358,10 @@ components:
           type: string
           format: date
           example: "2022-01-01"
+        Phonenumber:
+          type: array
+          items:
+            $ref: '#/components/schemas/PhoneNumber'
     CreateCourse:
       type: object
       properties:
@@ -400,3 +414,12 @@ components:
         id:
           type: integer
           example: 10
+    PhoneNumber:
+      type: object
+      properties:
+        number:
+          type: string
+          example: "0340000000"
+        country_code:
+          type: string
+          example: "+261"
