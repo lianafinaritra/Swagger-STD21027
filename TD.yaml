@@ -1,0 +1,546 @@
+openapi: 3.0.1
+info:
+  title: STD21027
+  description: API Description
+  
+  version: 1.0.0
+
+servers:
+- url: https://STD21027.com
+tags:
+- name: Films
+- name: Students
+- name: Courses
+
+paths:
+  /films:
+    get:
+      tags:
+      - Films
+      summary: Get all films
+      description: Get all films with details
+      operationId: getAllFilms
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: List of films
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+          
+    post:
+      tags:
+      - Films
+      summary: Create new film
+      description: Request to add a new film
+      operationId: addFilm
+      requestBody:
+        description: Film to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFilm'
+        required: true
+      responses:
+        200:
+          description: Film information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+          
+    put:
+      tags:
+      - Films
+      summary: Update film
+      description: Change all informations of a film
+      operationId: putFilm
+      requestBody:
+        description: Film to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Film'
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+          
+    patch:
+      tags:
+      - Films
+      summary: Update film
+      description: Change informations of film
+      operationId: patchFilm
+      requestBody:
+        description: Film to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Film'
+            examples:
+              changeTitle:
+                summary: Change title
+                description: How to change title and what it does
+                value:
+                 id: 10
+                 name: "New title"
+              changeSummary:
+                summary: Change summary
+                description: How to change summary and what it does
+                value:
+                 id: 10
+                 name: "C'est encore l'histoire de la mort qui marche"
+              changeNameandAddres:
+                summary: Change title and summary but not all
+                value:
+                  id: 10
+                  name: "New title"
+                  address: "New summary"
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+  
+  /films/{id}:
+    get:
+      tags:
+      - Films
+      summary: Get film
+      description: Get film with id
+      operationId: getFilm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Film found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateFilm'
+        400:
+          description: Bad request
+          
+    put:
+      tags:
+      - Films
+      summary: Update film
+      description: Change all informations of a film with id
+      operationId: putFilmbyId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: integer
+      requestBody:
+        description: Film to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFilm'
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+          
+    patch:
+      tags:
+      - Films
+      summary: Update film
+      description: Change informations of film
+      operationId: patchFilmbyId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: integer
+      requestBody:
+        description: Film to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Film'
+            examples:
+              changeTitle:
+                summary: Change title
+                description: How to change title and what it does
+                value:
+                 name: "New title"
+              changeSummary:
+                summary: Change summary
+                description: How to change summary and what it does
+                value:
+                 name: "C'est encore l'histoire de la mort qui marche"
+              changeNameandAddres:
+                summary: Change title and summary but not all
+                value:
+                  name: "New title"
+                  address: "New summary"
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Film'
+        400:
+          description: Bad request
+    
+    delete:
+      tags:
+      - Films
+      summary: Delete film
+      description: Delete film
+      operationId: deleteFilm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Student deleted
+        400:
+          description: Bad request
+  
+  /rooms:
+    get:
+      tags:
+      - Rooms
+      summary: Get all rooms
+      description: Get all rooms with details
+      operationId: getAllRooms
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: List of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+    
+    put:
+      tags:
+      - Rooms
+      summary: Update room
+      description: Change all informations of room
+      operationId: putRoom
+      requestBody:
+        description: Room to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        400:
+          description: Bad request
+    
+    patch:
+      tags:
+      - Rooms
+      summary: Update room
+      description: Change informations of room
+      operationId: patchRoom
+      requestBody:
+        description: Room to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+            examples:
+              changeCapacity:
+                summary: Change capacity
+                description: How to change capacity and what it does
+                value:
+                 id: 10
+                 capacity: 250
+              addFilmList:
+                summary: Add new Film
+                value:
+                  id: 10
+                  FilmList:
+                  - id: 10
+                    title: "Deadpool 1"
+                  - id: 11
+                    title: "Deadpool 2"
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        400:
+          description: Bad request
+          
+  /rooms/{id}:
+    get:
+      tags:
+      - Rooms
+      summary: Get room
+      description: Get room with details
+      operationId: getRoom
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: number
+          enum: [1,2]
+      responses:
+        200:
+          description: List of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+                  
+    put:
+      tags:
+      - Rooms
+      summary: Update room
+      description: Change all informations of room
+      operationId: putRoombyId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: number
+          enum: [1,2]
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        400:
+          description: Bad request
+          
+    patch:
+      tags:
+      - Rooms
+      summary: Update room
+      description: Change informations of room
+      operationId: patchRoombyId
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: number
+          enum: [1,2]
+      requestBody:
+        description: Room to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Room'
+            examples:
+              changeCapacity:
+                summary: Change capacity
+                description: How to change capacity and what it does
+                value:
+                 capacity: 250
+              addFilmList:
+                summary: Add new Film
+                value:
+                  FilmList:
+                  - id: 10
+                    title: "Deadpool 1"
+                  - id: 11
+                    title: "Deadpool 2"
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Room'
+        400:
+          description: Bad request
+          
+components:
+  schemas:
+    CreateFilm:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "The Walking Dead"
+        duration:
+          type: string
+          example: "2h 30min"
+        summary:
+          type: string
+          example: "C'est l'histoire de la mort qui marche"
+        producer:
+          type: string
+          example: "Random Guy"
+        release_date:
+          type: string
+          format: date
+          example: "2022-01-01"
+    CreateProjection:
+      type: object
+      properties:
+        Film:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilmList'
+        Room:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomList'
+        Time:
+          type: string
+          example: "15h"
+    Film:
+      allOf:
+        - $ref: '#/components/schemas/CreateFilm'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+    FilmList:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 10
+        title:
+          type: string
+          example: "The Walking Dead"
+    Projection:
+      allOf:
+        - $ref: '#/components/schemas/CreateProjection'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+    Room:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        capacity:
+          type: number
+          example: 200
+        FilmList:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilmList'
+    RoomList:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        capacity:
+          type: number
+          example: 200
