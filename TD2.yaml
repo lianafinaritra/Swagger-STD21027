@@ -2,7 +2,6 @@ openapi: 3.0.1
 info:
   title: STD21027
   description: API Description
-  
   version: 1.0.0
 
 servers:
@@ -10,6 +9,7 @@ servers:
 tags:
 - name: Films
 - name: Rooms
+- name: Projections
 
 paths:
   /films:
@@ -166,86 +166,6 @@ paths:
         400:
           description: Bad request
           
-    put:
-      tags:
-      - Films
-      summary: Update film
-      description: Change all informations of a film with id
-      operationId: putFilmbyId
-      parameters:
-      - name: id
-        in: path
-        required: true
-        explode: true
-        schema:
-          type: integer
-      requestBody:
-        description: Film to be changed
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateFilm'
-        required: true
-      responses:
-        200:
-          description: New information
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Film'
-        400:
-          description: Bad request
-          
-    patch:
-      tags:
-      - Films
-      summary: Update film
-      description: Change informations of film
-      operationId: patchFilmbyId
-      parameters:
-      - name: id
-        in: path
-        required: true
-        explode: true
-        schema:
-          type: integer
-      requestBody:
-        description: Film to be changed
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Film'
-            examples:
-              changeTitle:
-                summary: Change title
-                description: How to change title and what it does
-                value:
-                 name: "New title"
-              changeSummary:
-                summary: Change summary
-                description: How to change summary and what it does
-                value:
-                 name: "C'est encore l'histoire de la mort qui marche"
-              changeNameandAddres:
-                summary: Change title and summary but not all
-                value:
-                  name: "New title"
-                  address: "New summary"
-        required: true
-      responses:
-        200:
-          description: New information
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Film'
-        400:
-          description: Bad request
-    
     delete:
       tags:
       - Films
@@ -296,7 +216,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Room'
-    
+                  
     put:
       tags:
       - Rooms
@@ -388,20 +308,76 @@ paths:
                 items:
                   $ref: '#/components/schemas/Room'
                   
-    put:
+  /projections:
+    get:
       tags:
-      - Rooms
-      summary: Update room
-      description: Change all informations of room
-      operationId: putRoombyId
+      - Projections
+      summary: Get all projections
+      description: Get all projections with details
+      operationId: getAllProjections
       parameters:
-      - name: id
-        in: path
-        required: true
+      - name: page
+        in: query
+        required: false
+        style: form
         explode: true
         schema:
-          type: number
-          enum: [1,2]
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: List of projections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Projection'
+                  
+    post:
+      tags:
+      - Projections
+      summary: Create new projection
+      description: Request to add a new projection
+      operationId: addProjection
+      requestBody:
+        description: Projection to be created
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjection'
+        required: true
+      responses:
+        200:
+          description: Film information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Projection'
+        400:
+          description: Bad request
+          
+    put:
+      tags:
+      - Projections
+      summary: Update projection
+      description: Change all informations of projection
+      operationId: putProjection
+      requestBody:
+        description: Projection to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Projection'
+        required: true
       responses:
         200:
           description: New information
@@ -416,33 +392,186 @@ paths:
           
     patch:
       tags:
-      - Rooms
-      summary: Update room
-      description: Change informations of room
-      operationId: patchRoombyId
+      - Projections
+      summary: Update projection
+      description: Change informations of projection
+      operationId: patchProjection
+      requestBody:
+        description: Film to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Projection'
+            examples:
+              changeTime:
+                summary: Change time
+                description: How to change time and what it does
+                value:
+                 id: 10
+                 Time: "New time"
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Projection'
+        400:
+          description: Bad request
+          
+  /projections/{id}:
+    get:
+      tags:
+      - Projections
+      summary: Get projection
+      description: Get projection with id
+      operationId: getProjection
       parameters:
       - name: id
         in: path
         required: true
         explode: true
         schema:
-          type: number
-          enum: [1,2]
+          type: integer
+      responses:
+        200:
+          description: Film projection
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CreateProjection'
+        400:
+          description: Bad request
+          
+    delete:
+      tags:
+      - Projections
+      summary: Delete projection
+      description: Delete projection
+      operationId: deleteProjection
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Projection deleted
+        400:
+          description: Bad request
+          
+  /category:
+    get:
+      tags:
+      - Category
+      summary: Get all category
+      description: Get all category with details
+      operationId: getAllCategory
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: List of category
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+    
+    post:
+      tags:
+      - Category
+      summary: Create new category
+      description: Request to add a new category
+      operationId: addCategory
       requestBody:
-        description: Room to be changed
+        description: Category to be created
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Room'
+              $ref: '#/components/schemas/CreateCategory'
+        required: true
+      responses:
+        200:
+          description: Film information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        400:
+          description: Bad request
+    
+    put:
+      tags:
+      - Category
+      summary: Update category
+      description: Change all informations of a category
+      operationId: putCategory
+      requestBody:
+        description: Category to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+        required: true
+      responses:
+        200:
+          description: New information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+        400:
+          description: Bad request
+          
+    patch:
+      tags:
+      - Category
+      summary: Update category
+      description: Change informations of category
+      operationId: patchCategory
+      requestBody:
+        description: Category to be changed
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
             examples:
-              changeCapacity:
-                summary: Change capacity
-                description: How to change capacity and what it does
+              changeName:
+                summary: Change name
+                description: How to change name and what it does
                 value:
-                 capacity: 250
+                 id: 10
+                 name: 'Ironique'
               addFilmList:
                 summary: Add new Film
                 value:
+                  id: 10
                   FilmList:
                   - id: 10
                     title: "Deadpool 1"
@@ -460,6 +589,52 @@ paths:
                   $ref: '#/components/schemas/Room'
         400:
           description: Bad request
+  
+  /category/{id}:
+    get:
+      tags:
+      - Category
+      summary: Get category
+      description: Get category with id
+      operationId: getCategory
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Category found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryList'
+        400:
+          description: Bad request
+          
+    delete:
+      tags:
+      - Category
+      summary: Delete category
+      description: Delete category
+      operationId: deleteCategory
+      parameters:
+      - name: id
+        in: path
+        required: true
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: Category deleted
+        400:
+          description: Bad request
+    
           
 components:
   schemas:
@@ -488,7 +663,7 @@ components:
         Film:
           type: array
           items:
-            $ref: '#/components/schemas/FilmList'
+            $ref: '#/components/schemas/Film'
         Room:
           type: array
           items:
@@ -504,15 +679,6 @@ components:
         id:
           type: integer
           example: 10
-    FilmList:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 10
-        title:
-          type: string
-          example: "The Walking Dead"
     Projection:
       allOf:
         - $ref: '#/components/schemas/CreateProjection'
@@ -521,6 +687,35 @@ components:
         id:
           type: integer
           example: 10
+    CreateCategory:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'Dramatique'
+    CategoryList:
+      allOf:
+        - $ref: '#/components/schemas/Film'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        name:
+          type: string
+          example: 'Joe'
+    Category:
+      allOf:
+        - $ref: '#/components/schemas/CreateCategory'
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 10
+        FilmList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Film'
     Room:
       type: object
       properties:
@@ -533,7 +728,7 @@ components:
         FilmList:
           type: array
           items:
-            $ref: '#/components/schemas/FilmList'
+            $ref: '#/components/schemas/Film'
     RoomList:
       type: object
       properties:
