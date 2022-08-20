@@ -359,103 +359,6 @@ paths:
         400:
           description: Bad request
   
-  /projections/today:
-    get:
-      tags:
-      - Projections
-      summary: Get all projections of today
-      description: Get all projections of today
-      operationId: getProjectionsofToday
-      parameters:
-      - name: page
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: page_size
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      responses:
-        200:
-          description: List of projections
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Projection' 
-                  
-  /projections/week:
-    get:
-      tags:
-      - Projections
-      summary: Get all projections of this week
-      description: Get all projections of this week
-      operationId: getProjectionsofThisWeek
-      parameters:
-      - name: page
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: page_size
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      responses:
-        200:
-          description: List of projections
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Projection'   
-                  
-  /projections/month:
-    get:
-      tags:
-      - Projections
-      summary: Get all projections of this month
-      description: Get all projections of this month
-      operationId: getProjectionsofThisMonth
-      parameters:
-      - name: page
-        in: query
-        required: false
-        style: form
-        explode: true
-        schema:
-          type: integer
-      - name: page_size
-        in: query
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: integer
-      responses:
-        200:
-          description: List of projections
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Projection'    
-          
-          
   /film/category:
     get:
       tags:
@@ -557,7 +460,38 @@ paths:
           description: Category deleted
         400:
           description: Bad request
-    
+  
+  /calendar:
+    get:
+      tags:
+      - Calendar
+      summary: Get all projections of this week
+      description: Get all projections of this week
+      operationId: getProjectionsofCalendar
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: page_size
+        in: query
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        200:
+          description: List of projections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Calendar' 
           
 components:
   schemas:
@@ -599,6 +533,14 @@ components:
           example: 10
     CreateProjection:
       type: object
+      allOf:
+        - $ref: '#/components/schemas/CalendarProjection'
+      properties:
+        Time:
+          type: string
+          format: date-time
+    CalendarProjection:
+      type: object
       properties:
         Film:
           type: array
@@ -608,9 +550,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Room'
-        Time:
-          type: string
-          format: date-time
     Projection:
       allOf:
         - $ref: '#/components/schemas/CreateProjection'
@@ -633,6 +572,35 @@ components:
         id:
           type: integer
           example: 10
+    Calendar:
+      type: object
+      properties:
+        weekOf:
+          type: string
+          format: date
+          example: 2022-08-01
+        calendar:
+          type: array
+          items:
+            $ref: "#/components/schemas/Day"
+    Day:
+      type: object
+      properties:
+        date:
+         type: string
+         example: Monday, 01 August 2022
+        schedules:
+          type: array
+          items: 
+            $ref: "#/components/schemas/Schedule"
+    Schedule:
+      type: object
+      properties:
+        hour:
+          type: string
+          example: 08:00 AM
+        screening:
+         $ref: '#/components/schemas/CalendarProjection'
     Room:
       type: object
       properties:
